@@ -25,29 +25,38 @@ def user_pick(b)
   b[choice] = 'O'
 end
 
+def two_in_a_row(hash, mark)
+  if hash.values.count(mark) == 2
+    return hash.select {|_,v| v == ' '}.keys.first
+  end
+  return nil
+end
+
 def computer_pick(b)
-  # prevent from losing the game
-  WINNER_LINES.each do |line| 
-    if b.values_at(*line).count('O') == 2
-      choice = line.select {|position| b[position] == ' '}.first
-      if choice
-        b[choice] = 'X'
-        return
-      end
-    end
+  rows = []
+  WINNER_LINES.each do |line|
+    rows << b.select{|k,_| line.include? k}
   end
 
   # try to winning the game
-  WINNER_LINES.each do |line| 
-    if b.values_at(*line).count('X') == 2
-      choice = line.select {|position| b[position] == ' '}.first
-      if choice
-        b[choice] = 'X'
-        return
-      end
+  rows.each do |row|
+    choice = two_in_a_row(row, 'X')
+    if choice
+      b[choice] = 'X'
+      return
     end
   end
 
+  # prevent from losing the game
+  rows.each do |row|
+    choice = two_in_a_row(row, 'O')
+    if choice
+      b[choice] = 'X'
+      return
+    end
+  end
+
+  # other cases
   choice = b.keys.select{|k| b[k] == ' '}.sample
   b[choice] = 'X'
 end
