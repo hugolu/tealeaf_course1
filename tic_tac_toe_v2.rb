@@ -1,4 +1,5 @@
 # use hash to handle the board
+WINNER_LINES =[[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
 
 board = {}
 
@@ -25,6 +26,28 @@ def user_pick(b)
 end
 
 def computer_pick(b)
+  # prevent from losing the game
+  WINNER_LINES.each do |line| 
+    if b.values_at(*line).count('O') == 2
+      choice = line.select {|position| b[position] == ' '}.first
+      if choice
+        b[choice] = 'X'
+        return
+      end
+    end
+  end
+
+  # try to winning the game
+  WINNER_LINES.each do |line| 
+    if b.values_at(*line).count('X') == 2
+      choice = line.select {|position| b[position] == ' '}.first
+      if choice
+        b[choice] = 'X'
+        return
+      end
+    end
+  end
+
   choice = b.keys.select{|k| b[k] == ' '}.sample
   b[choice] = 'X'
 end
@@ -33,7 +56,6 @@ def game_finish?(b)
   b.values.count(' ') == 0
 end
 
-WINNER_LINES =[[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,6], [3,6,9], [1,5,9], [3,5,7]]
 def check_winner(board)
   WINNER_LINES.each do |line|
     return 'Player' if board.values_at(*line).count('O') == 3
