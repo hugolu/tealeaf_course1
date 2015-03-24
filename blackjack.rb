@@ -79,6 +79,7 @@ loop do
 
   # 1. init the poker cards
   cards = have_new_cards
+  
   player_cards = []
   dealer_cards = []
 
@@ -87,10 +88,12 @@ loop do
 
   # 2. deal a card to player and dealer
   player_cards << deal_a_card(cards)
+  print "player: "
   show_cards(player_cards)
   player_sum = calc_sum(player_cards)
 
   dealer_cards << deal_a_card(cards)
+  print "dealer: "
   show_cards(dealer_cards)
   dealer_sum = calc_sum(dealer_cards)
 
@@ -101,18 +104,36 @@ loop do
       break
     end
     player_cards << card
+    print "player: "
     show_cards(player_cards)
     player_sum = calc_sum(player_cards)
   end
 
+  if player_sum > 21
+    puts "player has \"busted\""
+    play_again? == true ? next : exit
+  end
+
   # 4. the dealer must hit until she has at least 17
   until dealer_sum >= 21
-    if dealer_sum >= 17 and dealer_sum > player_sum
+    if dealer_sum >= 17 and dealer_sum >= player_sum
       break
     end
     dealer_cards << deal_a_card(cards)
+    print "dealer: "
     show_cards(dealer_cards)
     dealer_sum = calc_sum(dealer_cards)
+  end
+
+  if dealer_sum > 21
+    puts "dealer has \"busted\""
+    puts "player won."
+  else
+    if dealer_sum > player_sum
+      puts "dealer won."
+    else
+      puts "a tie."
+    end
   end
 
   # 5. play again?
