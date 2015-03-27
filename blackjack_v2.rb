@@ -1,7 +1,9 @@
-def show_cards(cards)
+def cards_to_s(cards)
+  str = ""
   cards.each do |(suit, rank)|
-    print "#{suit}#{rank}, "
+    str += "#{suit}#{rank}, "
   end
+  str
 end
 
 def calc_total(cards)
@@ -50,10 +52,61 @@ player_total = calc_total(player_cards)
 dealer_total = calc_total(dealer_cards)
 
 # show cards
-print "Player has "
-show_cards(player_cards)
-puts "total = #{player_total}"
+puts "Player has #{cards_to_s(player_cards)} for a total of #{player_total}"
+puts "Dealer has #{cards_to_s(dealer_cards)} for a total of #{dealer_total}"
+puts ""
 
-print "Dealer has "
-show_cards(dealer_cards)
-puts "total = #{dealer_total}"
+# player turn
+while player_total < 21
+  puts "What would you like to do? (H)it, (S)tay"
+  hit_or_stay = gets.chomp.downcase
+
+  if hit_or_stay == 'h'
+    # hit
+  elsif hit_or_stay == 's'
+    break
+  else
+    next
+  end
+
+  player_cards << deck.pop
+  player_total = calc_total(player_cards)
+  puts "Player has #{cards_to_s(player_cards)} for a total of #{player_total}"
+
+  if player_total == 21
+    puts "Congratulations, you hit blackjack! You win!"
+    exit
+  elsif player_total > 21
+    puts "Sorry, it looks like you busted!"
+    exit
+  end
+end
+
+# Dealer turn
+if dealer_total == 21
+  puts "Sorry, dealer hit blackjack. You lose."
+  exit
+end
+
+while dealer_total < 17
+  dealer_cards << deck.pop
+  dealer_total = calc_total(dealer_cards)
+  puts "Dealer has #{cards_to_s(dealer_cards)} for a total of #{dealer_total}"
+
+  if dealer_total == 21
+    puts "Sorry, dealer hit blackjack. You lose."
+    exit
+  elsif dealer_total > 21
+    puts "Congratulations, dealer busted! You win!"
+    exit
+  end
+end
+
+# compare hands
+if player_total > dealer_total
+  puts "Congratulations, you win!"
+elsif player_total < dealer_total
+  puts "Sorry, dealer wins."
+else
+  puts "A tie."
+end
