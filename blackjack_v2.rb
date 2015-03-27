@@ -5,7 +5,26 @@ def show_cards(cards)
 end
 
 def calc_total(cards)
-  0
+  total = 0
+  aces = 0
+  cards.each do |(suit, rank)|
+    case rank
+    when 'A'
+      total += 11
+      aces += 1
+    when 'J','Q','K'
+      total += 10
+    else
+      total += rank.to_i
+    end
+  end
+
+  #correct for Aces
+  aces.times do
+    total -= 10 if total > 21
+  end
+
+  total
 end
 
 # Interactive command line blackjack game
