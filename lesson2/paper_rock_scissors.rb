@@ -4,6 +4,7 @@
 # 3. Computer turn: pick P/R/S randomly
 # 4. Show the picks: You picked P/R/S and computer picked P/R/S.
 # 5. Check the result: Paper beats Rock!
+#    with rules: a tie (if both are the same), or p > r, r > s, s > p
 # 6. Who is the winner: You/Computer won!
 # 7. Go to 2 if player would like to play again
 
